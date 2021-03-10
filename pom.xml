@@ -1,0 +1,171 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.luobo</groupId>
+  <artifactId>AutoTest</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>AutoTest</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <xmlFilename>testng.xml</xmlFilename>
+  </properties>
+
+  <dependencies>
+  	
+  	<!-- selenium -->
+  	<dependency>
+	    <groupId>org.seleniumhq.selenium</groupId>
+	    <artifactId>selenium-java</artifactId>
+	    <version>3.141.5</version>
+	</dependency>
+	
+	<!-- testNG -->
+	<dependency>
+	    <groupId>org.testng</groupId>
+	    <artifactId>testng</artifactId>
+	    <version>6.14.3</version>
+	    <scope>test</scope>
+	</dependency>
+  	
+  	<!-- spring日志依赖 -->
+  	<dependency>
+  		<groupId>org.slf4j</groupId>
+  		<artifactId>jcl-over-slf4j</artifactId>
+  		<version>1.7.21</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>ch.qos.logback</groupId>
+  		<artifactId>logback-classic</artifactId>
+  		<version>1.1.7</version>
+  	</dependency>
+  	
+  	<!-- JUnit 单元测试 -->
+    <dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+		<version>4.12</version>
+		<scope>test</scope>
+    </dependency>
+    
+    <!-- reportNG -->
+    <dependency>
+    	<groupId>org.uncommons</groupId>
+	    <artifactId>reportng</artifactId>
+	    <version>1.1.4</version>
+	    <scope>test</scope>
+	</dependency>
+	
+	<!-- google inject(reportNG的依赖) -->
+	<dependency>
+	    <groupId>com.google.inject</groupId>
+	    <artifactId>guice</artifactId>
+	    <version>3.0</version>
+	</dependency>
+	
+	<!-- java mail -->
+	<dependency>
+	    <groupId>javax.mail</groupId>
+	    <artifactId>mail</artifactId>
+	    <version>1.4.7</version>
+	</dependency>
+	
+	<!-- poi -->
+	<dependency>
+	  <groupId>org.apache.poi</groupId>
+	  <artifactId>poi</artifactId>
+	  <version>3.17</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>org.apache.poi</groupId>
+	  <artifactId>poi-ooxml</artifactId>
+	  <version>3.17</version>
+	</dependency>
+		
+    
+  </dependencies>
+  
+  <build>
+  	<pluginManagement>
+  		<plugins>
+  			<plugin>
+  				<groupId>org.apache.maven.plugins</groupId>
+  				<artifactId>maven-compiler-plugin</artifactId>
+  				<version>3.8.1</version>
+  			</plugin>
+  			
+  			<plugin>
+  				<groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-surefire-plugin</artifactId>
+			    <version>2.22.2</version>
+  			</plugin>
+  		</plugins>
+  	</pluginManagement>
+  	
+  	<plugins>
+  		<plugin>
+  			<groupId>org.apache.maven.plugins</groupId>
+  			<artifactId>maven-compiler-plugin</artifactId>
+  			<configuration>
+  				<source>1.8</source>
+  				<target>1.8</target>
+  				<encoding>UTF-8</encoding>
+  			</configuration>
+  		</plugin>
+  		
+  		<plugin>
+  			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-surefire-plugin</artifactId>
+  			<configuration>
+  				<testFailureIgnore>true</testFailureIgnore>
+  				<forkMode>once</forkMode>
+  				<suiteXmlFiles>
+  					<suiteXmlFile>testng.xml</suiteXmlFile>
+  				</suiteXmlFiles>
+  				<!-- 关闭testNG默认的监听 -->
+  				<!-- 新增reportNG监听 -->
+  				<properties>
+  					<property>
+  						<name>usedefaultlisteners</name>
+  						<value>false</value>
+  					</property>
+  					<property>
+  						<name>listener</name>
+  						<value>org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter</value>
+  					</property>
+  				</properties>
+  				<workingDirectory>target/</workingDirectory>
+  			</configuration>
+  		</plugin>
+  		
+  		<plugin>
+  			<groupId>org.codehaus.mojo</groupId>
+  			<artifactId>exec-maven-plugin</artifactId>
+  			<version>1.1.1</version>
+  			<executions>
+  				<execution>
+  					<!-- 在什么域下执行，maven-test之后执行，因此取test -->
+  					<phase>test</phase>
+  					<!-- 目标是什么类型 -->
+  					<goals>
+  						<goal>java</goal>
+  					</goals>
+  					<configuration>
+  						<!-- 后面处理的内容是否需要加载Dependencies -->
+  						<includePluginDependencies>true</includePluginDependencies>
+  						<!-- 核心执行类 -->
+  						<mainClass>com.luobo.mail.AutoMail</mainClass>
+  					</configuration>
+  				</execution>
+  			</executions>
+  		</plugin>
+  		
+  	</plugins>
+  </build>
+  
+</project>
